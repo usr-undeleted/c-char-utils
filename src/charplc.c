@@ -12,5 +12,8 @@ int main () {
 
 	printf("Original = %s\nResult = %s\n", word, result);
 
+	// remember to free the heap memory!
+	free(result);
+
 	return 0;
 }
