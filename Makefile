@@ -1,5 +1,6 @@
-compiling:
-	echo "use either 'fndchar', 'chchar', for valid funcs"
+.SILENT:
+noflag:
+	echo "hello! use either 'fndchar', 'chchar', 'charplc' or 'clrchar' to compile example code."
 
 clean:
 	rm -rf fndchar chchar charplc clrchar
