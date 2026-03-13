@@ -1,9 +1,9 @@
-.SILENT:
+
 noflag:
-	echo "hello! use either 'fndchar', 'chchar', 'charplc' or 'clrchar' to compile example code."
+	echo "hello! use either 'fndchar', 'chchar', 'charplc', 'clrchar' or 'strapp' to compile example code."
 
 clean:
-	rm -rf fndchar chchar charplc clrchar
+	rm -rf fndchar chchar charplc clrchar strapp
 
 fndchar:
 	rm -rf bin/fndchar fndchar
@@ -25,3 +25,7 @@ clrchar:
 	gcc -I ./src -o ./bin/clrchar src/clrchar.c
 	ln -s bin/clrchar clrchar
 
+strapp:
+	rm -rf bin/strapp strapp
+	gcc -I ./src -o ./bin/strapp src/strapp.c
+	ln -s bin/strapp strapp

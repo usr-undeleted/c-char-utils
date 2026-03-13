@@ -1,5 +1,5 @@
 # c-char-utils
-Various utilities inside a header file for messing with chars in C.  
+Various utilities inside a header file for messing with individual strings and their chars in C.  
 See the make command for help on compiling example code. Note that the code has to be edited to show variables.  
 Contributing might never be accepted (as it probally wont be needed), but incase your fork is intuitive and solves a real issue, it will be accepted if:  
 1. Good code that is more efficient/readable than the current version  

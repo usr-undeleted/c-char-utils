@@ -107,7 +107,7 @@ int chchar(char word[], char match, char replace, int pckcase) {
 
 // takes string, and either (correlates to <option>):
 // 1. append char to the end of string
-// 2. return new string
+// 2. return new string with char in <index>
 // returns \0 incase it fails
 char *charplc(char *word, char letter, int index, int option) {
 
@@ -115,9 +115,10 @@ char *charplc(char *word, char letter, int index, int option) {
 
 	// malloc-ed in order to be returned
 	char *result = (char *)malloc(len + 1);
+	if (!result) return NULL;
 
 	// again, make sure user doesnt put invalid input
-	if (word[0] == '\0' || letter == '\0' || index < 0 || option < 1 || option > 2) {
+	if (word[0] == '\0' || letter == '\0' || index < 0 || option < 1 || option > 2 || index > len) {
 		return "";
 	}
 
@@ -160,43 +161,128 @@ char *clrchar(char *word, int index, int option) {
 
 	int len = strlen(word);
 
-	// malloc-ed in order to be returned
-	char *result = (char *)malloc(len - 1);
-
-	if (word[0] == '\0' || index < 0 || option < 1 || option > 2) {
-		return "";
+	if (word[0] == '\0' || index < 0 || option < 1 || option > 2 || index > len) {
+		return NULL;
 	}
 
-	// move index to the right once since string is decreased
-	index++;
+	switch (option) {
+		case 1: {
+			// malloc-ed here to prevent uneeded mem usage
+			char *result = (char *)malloc(len);
+			if (!result) return NULL;
 
-	if (option == 1) {
-		// set result to word
-		for (int i = 0; i < len; i++) {
-			result[i] = word[i];
-		}
-
-		// replace char with space
-		result[index] = ' ';
-
-		return result;
-
-	} else
-
-		if (option == 2) {
-			// set result to word
+			// copy word to result
 			for (int i = 0; i < len; i++) {
 				result[i] = word[i];
 			}
 
-			// get anything after index in word and put it in result[index - 1]
-			// (move anything floating back)
+			// set result[index] to space
+			result[index] = ' ';
+
+			return result;
+		}
+		case 2: {
+			// malloc-ed here to prevent uneeded mem usage
+			char *result = (char *)malloc(len);
+			if (!result) return NULL;
+
+			// copy everything before index
+			for (int i = 0; i < index; i++) {
+				result[i] = word[i];
+			}
+
+			// copy whatever is after index
 			for (int i = index; i < len; i++) {
-				result[i - 1] = word[i];
+				result[i] = word[i + 1];
 			}
 
 			return result;
+		}
 	}
+}
+
+// deviates a little from the previous funcs, but it still works inside a string
+// takes in an input string to be edited and one to be appended, and either:
+// 1: just plops the string onto the end of the string
+// (basically, switches place with whatever was in place before)
+// 2: does the same but adds a space before the appended string
+char *strapp(char *word, char *append, int index, int option) {
+
+	int len = strlen(word);
+	int applen = strlen(append);
+	int totallen = applen + len;
+
+	if (word[0] == '\0' || append[0] == '\0' || index < 0 || option < 1 || option > 2 || index > len) {
+		return NULL;
+	}
+
+	switch (option) {
+		case 1: {
+			// malloc-ed here to prevent uneeded memory usage
+			// + 1 to account for \0
+			char *result = (char *)malloc(len + applen + 1);
+			if (!result) return NULL;
+
+			// copy everything before index
+			for (int i = 0; i < index; i++) {
+				result[i] = word[i];
+			}
+
+			// copy append to the end
+			for (int i = 0; i < applen; i++) {
+				result[index + i] = append[i];
+			}
+
+			// copy whatever was left of word
+			for (int i = index; i < len; i++) {
+				result[applen + i] = word[i];
+			}
+
+			// finalize string with end thingie
+			result[len + applen] = '\0';
+
+			return result;
+		}
+		case 2:
+			// malloc-ed here to prevent uneeded memory usage
+			// + 2 to include space and \0
+			char *result = (char *)malloc(len + applen + 2);
+			if (!result) return NULL;
+
+			// malloc a new append with one space at the start
+			char *edapp = (char *)malloc(sizeof(append) + 1);
+			if (!result) return NULL;
+			edapp[0] = ' ';
+
+			// copy append's contents starting from [1]
+			int j = 0;
+			for (int i = 1; i < sizeof(edapp); i++) {
+				edapp[i] = append[j];
+				j++;
+			}
+			applen = sizeof(edapp);
+
+			// copy everything before index
+			for (int i = 0; i < index; i++) {
+				result[i] = word[i];
+			}
+
+			// copy append to the end
+			for (int i = 0; i < applen; i++) {
+				result[index + i] = edapp[i];
+			}
+
+			// copy whatever was left of word
+			for (int i = index; i < len; i++) {
+				result[applen + i] = word[i];
+			}
+
+			// finalize string with end thingie
+			result[len + applen] = '\0';
+
+			return result;
+	}
+
 }
 
 #endif
