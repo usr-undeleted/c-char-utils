@@ -285,4 +285,21 @@ char *strapp(char *word, char *append, int index, int option) {
 
 }
 
+// simple implementation of tolower() that is here just
+// for conveniance sake really
+char *strtolower(char *word) {
+
+	if (word[0] == '\0') {
+		return NULL;
+	}
+
+	char *result = (char *)malloc(sizeof(word));
+
+	for (int i = 0; i < strlen(word); i++) {
+		result[i] = tolower(word[i]);
+	}
+
+	return result;
+}
+
 #endif
